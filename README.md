@@ -1,2 +1,3 @@
 # banking
-banking program
+simple banking program in c
+

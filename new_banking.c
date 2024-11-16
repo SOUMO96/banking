@@ -19,6 +19,7 @@ int generate_random()
 void add_account(struct banking_update banking_updates[], int *count);
 void fetch_data(struct banking_update banking_updates[], int count);
 void update_balance(struct banking_update banking_updates[], int *count);
+void withdrawal(struct banking_update banking_updates[],int *count);
 
 int main()
 {
@@ -31,7 +32,8 @@ int main()
         printf(" 1)ADD USER\n");
         printf(" 2)CHECK BALANCE\n");
         printf(" 3)DEPOSITE\n");
-        printf(" 4)EXIT!\n");
+        printf(" 4)WITHDRAWAL!\n");
+        printf(" 5)EXIT!\n");
         printf("ENTER YOUR CHOICE :");
         scanf("%d", &choice);
         switch (choice)
@@ -46,6 +48,9 @@ int main()
             update_balance(banking_updates, &count);
             break;
         case 4:
+            withdrawal(banking_updates,&count);
+            break;
+        case 5:
             return 0;
         default:
             printf("INVALID INPUT!");
@@ -136,7 +141,7 @@ void update_balance(struct banking_update banking_updates[], int *count)
 
             banking_updates[i].balance += new_balance;
 
-            printf("AMOUNT CREDITEd SUCCESSFULLY!\n");
+            printf("AMOUNT CREDITED SUCCESSFULLY!\n");
             printf("NEW BALANCE: %d\n", banking_updates[i].balance);
             found = 1;
             break;
@@ -147,3 +152,33 @@ void update_balance(struct banking_update banking_updates[], int *count)
         printf("ACCOUNT NUMBER NOT FOUND. PLEASE TRY AGAIN.\n");
     }
 }
+void withdrawal(struct banking_update banking_updates[], int *count)
+{
+    int search_id, new_balance;
+    int found = 0;
+
+    printf("ENTER YOUR ACCOUNT NUMBER : ");
+    scanf("%d", &search_id);
+
+    for (int i = 0; i < *count; i++)
+    {
+        if (banking_updates[i].account_number == search_id)
+        {
+            printf("ENTER THE WITHDRAWAL AMOUNT : ");
+            scanf("%d", &new_balance);
+
+            banking_updates[i].balance -= new_balance;
+
+            printf("AMOUNT DEBITED SUCCESSFULLY!\n");
+            printf("NEW BALANCE: %d\n", banking_updates[i].balance);
+            found = 1;
+            break;
+        }
+    }
+    if (!found)
+    {
+        printf("ACCOUNT NUMBER NOT FOUND. PLEASE TRY AGAIN.\n");
+    }
+}
+
+

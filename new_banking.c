@@ -2,14 +2,17 @@
 #include <string.h>
 #include <time.h>
 #include <stdlib.h>
+#include <conio.h>
 #define MAX_NAME 100
+#define MAX_ACCOUNT 100
+#define PASSWORD 100
 
 struct banking_update
 {
     char name[MAX_NAME];
     int age, balance, check_balance;
     long long int account_number, phone_number;
-    char gender, catagory[MAX_NAME];
+    char gender, catagory[MAX_NAME], login_name[MAX_NAME], password[PASSWORD];
 };
 long long int generate_random()
 {
@@ -22,6 +25,7 @@ void add_account(struct banking_update banking_updates[], int *count);
 void fetch_data(struct banking_update banking_updates[], int count);
 void update_balance(struct banking_update banking_updates[], int *count);
 void withdrawal(struct banking_update banking_updates[], int *count);
+void get_password(char *password);
 
 int main()
 {
@@ -105,23 +109,68 @@ void add_account(struct banking_update banking_updates[], int *count)
         printf("Invalid phone number. Please enter a 10-digit number.\n");
         return;
     }
+    printf("ENTER USERNAME :");
+    getchar();
+    fgets(banking_updates[*count].login_name, MAX_NAME, stdin);
+    banking_updates[*count].login_name[strcspn(banking_updates[*count].login_name, "\n")] = 0;
+
+    printf("ENTER A PASSWORD :");
+    get_password(banking_updates[*count].password);
+
     printf("ENTER THE AMOUNT YOU WANT TO DEPOSITE :");
     scanf("%d", &banking_updates[*count].balance);
 
     banking_updates[*count].account_number = generate_random();
 
     printf("ACCOUNT NUMBER : %lld\n", banking_updates[*count].account_number);
+
+    printf("ACCOUNT CREATED SUCCESSFULLY!");
     (*count)++;
+}
+void get_password(char *password)
+{
+    int i = 0;
+    char ch;
+
+    while (1)
+    {
+        ch = getch();
+        if (ch == '\r')
+        {
+            password[i] = '\0';
+            break;
+        }
+        else if (ch == '\b' && i > 0)
+        {
+            printf("\b \b");
+            i--;
+        }
+        else if (i < PASSWORD - 1)
+        {
+            printf("*");
+            password[i++] = ch;
+        }
+    }
+    printf("\n");
 }
 void fetch_data(struct banking_update banking_updates[], int count)
 {
-    long long int search_id;
+
     int found = 0;
-    printf("ENTER YOUR ACCOUNT NUMBER :");
-    scanf("%lld", &search_id);
+
+    char user_name[MAX_NAME], user_password[PASSWORD];
+
+    printf("ENTER USERNAME :");
+    getchar();
+    fgets(user_name, MAX_NAME, stdin);
+    user_name[strcspn(user_name, "\n")] = 0;
+
+    printf("ENTER YOUR PASSWORD :");
+    get_password(user_password);
+
     for (int i = 0; i < count; i++)
     {
-        if (banking_updates[i].account_number == search_id)
+        if (strcmp(banking_updates[i].login_name, user_name) == 0 && strcmp(banking_updates[i].password, user_password) == 0)
         {
             printf("\nACCOUNT FOUND!\n");
             printf("NAME: %s\n", banking_updates[i].name);

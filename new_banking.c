@@ -190,7 +190,7 @@ void fetch_data(struct banking_update banking_updates[], int count)
 
     if (!found)
     {
-        printf("WRONG ACCOUNT NUMBER TRY AGAIN!");
+        printf("WRONG USER NAME OR PASSOWRD TRY AGAIN!");
     }
 }
 void update_balance(struct banking_update banking_updates[], int *count)
